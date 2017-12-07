@@ -10,7 +10,7 @@ param (
     [Parameter( Mandatory = $true)]
     [string]$InputFile = $(throw "InputFile option is required"),
     [parameter(Mandatory = $true)]
-    [string]$RunningUser = $(throw "A username is required to run.")
+    [string]$RunBy = $(throw "A username is required to run.")
 )
 
 function Main () {
@@ -86,7 +86,8 @@ function writeReportMid () {
     Write-Output "`tReport of Computer `"$currentName`""# | writeOut
     Write-Output "$header"# | writeOut
     Write-Output "Current time is: $((get-date).Hour):$((get-date).Minute):$((get-date).Second)"# | writeOut
-    Write-Output "Report Run By: $runningUser"
+    Write-Output "Report Run By: $runBy"
+    Write-Output "Report Run As: $runningUser"
     Write-Output ""# | WriteOut
     Write-Output "$header"# | writeOut
     Write-Output "Computer is Online: $isOnline"# | writeOut
