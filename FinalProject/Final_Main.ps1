@@ -4,6 +4,22 @@
 #Creator: Matthew Winrich
 #Created: 11/09/2017
 
+<#
+.SYNOPSIS
+Final_Main.ps1 gathers and creates reports on specified computers
+.DESCRIPTION
+Final_Main.ps1 queries computers specifed in a csv file for computer information.  Then queries active directory for user information.
+.PARAMETER OutputDirectory
+The directory to write reports to.
+.PARAMETER InputFile
+The file that contains the computer names, ips, usernames, and passwords.
+.PARAMETER RunBye
+The name of the person running the script.
+.EXAMPLE
+Final_Main.ps1 -OutputDirectory C:\Scripts\FinalProject\Output -InputFile C:\Scripts\FinalProject\Final_Input.csv -RunBy "Matt Win"
+#>
+[cmdletBinding()]
+
 param (
     [Parameter(Mandatory = $true)]
     [string]$OutputDirectory = $(throw "OutpuDirectory option is required"),
@@ -64,7 +80,7 @@ function getInfoMid () {
 function getInfoFinal () {
     #final info
     [boolean]$ADModulePresent=isADModulePresent
-    $ADPath="OU=Corp,DC=mw,DC=local"#"OU=Students,OU=Users,OU=GBNetworkLabs,DC=gbnetworklabs,DC=local"
+    $ADPath="OU=Students,OU=Users,OU=GBNetworkLabs,DC=gbnetworklabs,DC=local"
     if ( $ADModulePresent -eq $true ) {
         $usersLastLogon=(get-aduser -Filter * -Properties DisplayName,LastLogonDate -SearchBase $ADPath -ErrorAction SilentlyContinue | Select-Object -Property DisplayName,LastLogonDate | sort -Property DisplayName)
         $usersLastPassChange=(get-aduser -Filter * -Properties DisplayName,PasswordLastSet -SearchBase $ADPath -ErrorAction SilentlyContinue | Select-Object -Property DisplayName,PasswordLastSet | sort -Property DisplayName)
@@ -231,6 +247,7 @@ function writeReportOld() {
 }
 
 function isADModulePresent () {
+    Import-Module ActiveDirectory
     $ADModuleStatus=((Get-Module ActiveDirectory) -ne $null)
     return $ADModuleStatus
 }
