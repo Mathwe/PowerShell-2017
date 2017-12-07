@@ -8,7 +8,9 @@ param (
     [Parameter(Mandatory = $true)]
     [string]$OutputDirectory = $(throw "OutpuDirectory option is required"),
     [Parameter( Mandatory = $true)]
-    [string]$InputFile = $(throw "InputFile option is required")
+    [string]$InputFile = $(throw "InputFile option is required"),
+    [parameter(Mandatory = $true)]
+    [string]$RunningUser = $(throw "A username is required to run.")
 )
 
 function Main () {
